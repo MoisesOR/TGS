@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TGS.Common.Logic\TGS.Common.Logic.csproj" />
+    <ProjectReference Include="..\TGS.DAO.DataAccess\TGS.DAO.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>
