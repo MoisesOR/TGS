@@ -30,6 +30,8 @@ namespace TGS
             services.AddDbContext<DbContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString(Configurations.ReadDataBaseConnection())));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,7 +45,12 @@ namespace TGS
             {
                 app.UseHsts();
             }
-
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+                builder.AllowAnyOrigin();
+            });
             app.UseHttpsRedirection();
             app.UseMvc();
         }

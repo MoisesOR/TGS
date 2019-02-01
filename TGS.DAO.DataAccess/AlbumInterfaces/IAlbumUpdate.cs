@@ -7,6 +7,6 @@ namespace TGS.DAO.DataAccess.Interfaces2
 {
     public interface IAlbumUpdate
     {
-        Album UpdateName(string name, int id);
+        int UpdateAlbum(Album Album, int id);
     }
 }

@@ -5,10 +5,8 @@ using TGS.Common.Logic.Models;
 
 namespace TGS.DAO.DataAccess.Interfaces2
 {
-    public interface IAlbumStudentDao
+    public interface IAlbumCreate
     {
-        List<Album> ReadAll();
-        Album ReadById(int id);
-        Album DeleteById(int id);
+        int AddMore(List<Album> albums);
     }
 }

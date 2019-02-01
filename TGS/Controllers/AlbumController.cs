@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TGS.Business.Logic;
 using TGS.Common.Logic.Models;
+using System.Linq;
 
 namespace TGS.Business.Facade.Controllers
 {
@@ -20,28 +21,51 @@ namespace TGS.Business.Facade.Controllers
 
         // GET: api/album/5
         [HttpGet("{id}")]
-        public Album GetStudent(int id)
+        public Album GetAlbum(int id)
         {
             return albumBl.ReadById(id);
+        }
+
+        // GET: api/album/1/
+        [Route("req/{startid}")]
+        [HttpGet]
+        public List<Album> GetAlbums(int startid)
+        {
+            return albumBl.GetAlbums(startid);
         }
 
         // POST: api/album
         [HttpPost]
         public string PostMoreAlbums([FromBody] List<Album> albums)
         {
-            albumBl.Create(albums);
-            return "OK";
+            int albumsCreated = albumBl.Create(albums);
+            if (albumsCreated != 0)
+            {
+                return albumsCreated + " Object created!";
+            }
+            return "No object created";
         }
 
         // DELETE: api/album/5
         [HttpDelete("{id}")]
-        public string DeleteTodoItem(int id)
+        public string DeleteAlbumItem(int id)
         {
-            Album albumExist = albumBl.ReadById(id);
-            if (albumExist.Name != null || albumExist.Genre != null)
+            int albumExist = albumBl.DeleteById(id);
+            if (albumExist != 0)
             {
-                albumBl.DeleteById(id);
                 return "Object deleted!";
+            }
+            return "Object not found.";
+        }
+
+        // UPDATE: api/album/5
+        [HttpPost("{id}")]
+        public string UpdateAlbum([FromBody]Album album, int id)
+        {
+            int albumUpdated = albumBl.UpdateAlbum(album, id);
+            if (albumUpdated != 0)
+            {
+                return "Object update!";
             }
             return "Object not found.";
         }

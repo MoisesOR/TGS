@@ -8,7 +8,7 @@ using TGS.DAO.DataAccess.Interfaces2;
 
 namespace TGS.DAO.DataAccess
 {
-    public class DataBaseDao : IAlbumRead, IAlbumCreate
+    public class DataBaseDao : IAlbumRead, IAlbumCreate, IAlbumDelete, IAlbumUpdate
     {
         private string Conexion { get; set; }
 
@@ -71,10 +71,9 @@ namespace TGS.DAO.DataAccess
             }
             return album;
         }
-        public List<Album> AddMore(List<Album> album)
+        public int AddMore(List<Album> album)
         {
-            List<Album> albumAdded = new List<Album>();
-
+            int rowsAffected = 0;
             for (int i = 0; i < album.Count; i++)
             {
                 using (SqlConnection connection = new SqlConnection(this.Conexion))
@@ -93,10 +92,11 @@ namespace TGS.DAO.DataAccess
 
                         connection.Open();
                         int recordsAffected = command.ExecuteNonQuery();
+                        rowsAffected = recordsAffected + rowsAffected;
                     }
                 }
             }
-            return albumAdded;
+            return rowsAffected;
         }
 
         public int DeleteById(int id)
@@ -119,110 +119,35 @@ namespace TGS.DAO.DataAccess
             }
         }
 
-        //public List<Student> AddMore(List<Student> student)
-        //{
-        //    List<Student> studentAdded = new List<Student>();
+        public int UpdateAlbum(Album album, int id)
+        {
+            Album albumUpdated = new Album();
+            using (SqlConnection connection = new SqlConnection(this.Conexion))
+            {
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = @"update dbo.AlbumList
+                                            set Year=@Year,
+                                            Album=@Album,
+                                            Artist=@Artist,
+                                            Genre=@Genre,
+                                            Subgenre=@Subgenre
+                                            where Id=@Id";
+                    command.Parameters.AddWithValue("@Year", album.Year);
+                    command.Parameters.AddWithValue("@Album", album.Name);
+                    command.Parameters.AddWithValue("@Artist", album.Artist);
+                    command.Parameters.AddWithValue("@Genre", album.Genre);
+                    command.Parameters.AddWithValue("@Subgenre", album.Subgenre);
+                    command.Parameters.AddWithValue("@Id", id);
 
-        //    for (int i = 0; i < student.Count; i++)
-        //    {
-        //        using (SqlConnection connection = new SqlConnection(this.Conexion))
-        //        {
-        //            using (SqlCommand command = new SqlCommand())
-        //            {
-        //                command.Connection = connection;
-        //                command.CommandType = CommandType.Text;
-        //                command.CommandText = @"INSERT into dbo.Students (Name, LastName, Dni, BirthDate, Age, CreationDate)
-        //                                    VALUES (@name, @lastName, @dni, @birthDate, @age, @creationDate)";
-        //                command.Parameters.AddWithValue("@name", student[i].Name);
-        //                command.Parameters.AddWithValue("@lastName", student[i].LastName);
-        //                command.Parameters.AddWithValue("@dni", student[i].Dni);
-        //                command.Parameters.AddWithValue("@birthDate", student[i].BirthDate);
-        //                command.Parameters.AddWithValue("@age", student[i].Age);
-        //                command.Parameters.AddWithValue("@creationDate", DateTime.Today);
-
-        //                connection.Open();
-        //                int recordsAffected = command.ExecuteNonQuery();
-        //            }
-        //        }
-        //    }
-        //    return studentAdded;
-        //}
-
-        //public int DeleteById(int id)
-        //{
-        //    Student alumnoInsertado = new Student();
-        //    using (SqlConnection connection = new SqlConnection(this.Conexion))
-        //    {
-        //        using (SqlCommand command = new SqlCommand())
-        //        {
-        //            command.Connection = connection;
-        //            command.CommandType = CommandType.Text;
-        //            command.CommandText = @"DELETE from dbo.Students 
-        //                                    WHERE Id = @Id";
-        //            command.Parameters.AddWithValue("@Id", id);
-
-        //            connection.Open();
-        //            int recordsAffected = command.ExecuteNonQuery();
-        //            return recordsAffected;
-        //        }
-        //    }
-        //}
-
-        //public List<Student> ReadAll()
-        //{
-        //    List<Student> students = new List<Student>();
-        //    using (
-
-        //        SqlConnection connection = new SqlConnection(this.Conexion))
-        //    {
-        //        connection.Open();
-        //        using (SqlCommand myCommand = new SqlCommand("select * from dbo.Students", connection))
-        //        {
-        //            SqlDataReader myReader = myCommand.ExecuteReader();
-        //            while (myReader.Read())
-        //            {
-        //                Student student = new Student();
-        //                student.Id = Convert.ToInt32(myReader["Id"]);
-        //                student.Name = myReader["Name"].ToString();
-        //                student.LastName = myReader["LastName"].ToString();
-        //                student.Dni = myReader["Dni"].ToString();
-        //                student.BirthDate = Convert.ToDateTime(myReader["BirthDate"]);
-        //                student.Age = Convert.ToInt32(myReader["Age"]);
-        //                student.CreationDate = Convert.ToDateTime(myReader["CreationDate"]);
-        //                students.Add(student);
-        //            }
-        //        }
-        //    }
-        //    return students;
-        //}
-
-        //public Student ReadById(int id)
-        //{
-        //    Student student = new Student();
-        //    using (SqlConnection connection = new SqlConnection(this.Conexion))
-        //    {
-        //        using (SqlCommand command = new SqlCommand())
-        //        {
-        //            command.Connection = connection;
-        //            command.CommandType = CommandType.Text;
-        //            command.CommandText = "select * from dbo.Students a where a.Id=@Id";
-        //            command.Parameters.AddWithValue("@Id", id);
-
-        //            connection.Open();
-        //            SqlDataReader myReader = command.ExecuteReader();
-        //            while (myReader.Read())
-        //            {
-        //                student.Id = Convert.ToInt32(myReader["Id"]);
-        //                student.Name = myReader["Name"].ToString();
-        //                student.LastName = myReader["LastName"].ToString();
-        //                student.Dni = myReader["Dni"].ToString();
-        //                student.BirthDate = Convert.ToDateTime(myReader["BirthDate"]);
-        //                student.Age = Convert.ToInt32(myReader["Age"]);
-        //                student.CreationDate = Convert.ToDateTime(myReader["CreationDate"]);
-        //            }
-        //        }
-        //    }
-        //    return student;
-        //}
+                    connection.Open();
+                    int recordsAffected = command.ExecuteNonQuery();
+                    return recordsAffected;
+                }
+            }
+        }
+        
     }
 }

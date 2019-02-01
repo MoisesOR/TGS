@@ -10,6 +10,8 @@ namespace TGS.Business.Logic
         List<Album> Read();
         Album ReadById(int id);
         int DeleteById(int id);
-        List<Album> Create(List<Album> album);
+        int Create(List<Album> album);
+        int UpdateAlbum(Album album, int id);
+        List<Album> GetAlbums(int startid);
     }
 }
