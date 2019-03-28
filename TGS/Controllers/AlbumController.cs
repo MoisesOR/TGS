@@ -26,7 +26,7 @@ namespace TGS.Business.Facade.Controllers
             return albumBl.ReadById(id);
         }
 
-        // GET: api/album/1/
+        // GET: api/album/req/1/
         [Route("req/{startid}")]
         [HttpGet]
         public List<Album> GetAlbums(int startid)
@@ -58,11 +58,12 @@ namespace TGS.Business.Facade.Controllers
             return "Object not found.";
         }
 
-        // UPDATE: api/album/5
-        [HttpPost("{id}")]
-        public string UpdateAlbum([FromBody]Album album, int id)
+        // UPDATE: api/album/update/5
+        [Route("update/{startid}")]
+        [HttpPost]
+        public string UpdateAlbum([FromBody]Album album, int startid)
         {
-            int albumUpdated = albumBl.UpdateAlbum(album, id);
+            int albumUpdated = albumBl.UpdateAlbum(album, startid);
             if (albumUpdated != 0)
             {
                 return "Object update!";

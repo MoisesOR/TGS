@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
 using TGS.Common.Logic.Configuration;
 using TGS.Common.Logic.Models;
 
@@ -17,33 +16,70 @@ namespace TGS.DAO.DataAccess
             this.Conexion = Configurations.ReadDataBaseConnection();
         }
 
-        public User ReadUser(string userName)
+        public User ReadUser(User user)
         {
-            User user = new User();
+            User newUser = new User();
             using (SqlConnection connection = new SqlConnection(this.Conexion))
             {
                 using (SqlCommand command = new SqlCommand())
                 {
                     command.Connection = connection;
                     command.CommandType = CommandType.Text;
-                    command.CommandText = "select * from dbo.UserList a where a.UserName=@User";
-                    command.Parameters.AddWithValue("@User", userName);
+                    command.CommandText = "select * from dbo.UserList a where a.[User]=@User";
+                    command.Parameters.AddWithValue("@User", user.UserName);
 
                     connection.Open();
                     SqlDataReader myReader = command.ExecuteReader();
                     while (myReader.Read())
                     {
-                        user.Id = Convert.ToInt32(myReader["Id"]);
-                        user.UserName = myReader["UserName"].ToString();
-                        user.UserPassword = myReader["Password"].ToString();
-                        user.Question = myReader["Question"].ToString();
-                        user.Answer = myReader["Answer"].ToString();
+                        newUser.Id = Convert.ToInt32(myReader["Id"]);
+                        newUser.UserName = myReader["User"].ToString();
+                        newUser.UserPassword = myReader["Password"].ToString();
                     }
                 }
             }
-            return user;
+            return newUser;
         }
 
+        public int AddUser(User user)
+        {
+            int rowsAffected = 0;
+            using (SqlConnection connection = new SqlConnection(this.Conexion))
+            {
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = @"INSERT into dbo.UserList ([User], Password)
+                                            VALUES (@User, @Passwd)";
+                    command.Parameters.AddWithValue("@User", user.UserName);
+                    command.Parameters.AddWithValue("@Passwd", user.UserPassword);
 
+                    connection.Open();
+                    int recordsAffected = command.ExecuteNonQuery();
+                    rowsAffected = recordsAffected + rowsAffected;
+                }
+            }
+            return rowsAffected;
+        }
+
+        public List<string> ReadAll()
+        {
+            List<string> users = new List<string>();
+            using (
+                SqlConnection connection = new SqlConnection(this.Conexion))
+            {
+                connection.Open();
+                using (SqlCommand myCommand = new SqlCommand("select [User] from dbo.UserList", connection))
+                {
+                    SqlDataReader myReader = myCommand.ExecuteReader();
+                    while (myReader.Read())
+                    {
+                        users.Add(myReader["User"].ToString());
+                    }
+                }
+            }
+            return users;
+        }
     }
 }

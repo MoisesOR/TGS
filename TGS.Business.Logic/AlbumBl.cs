@@ -9,13 +9,13 @@ namespace TGS.Business.Logic
 {
     public class AlbumBl : IAlbumBl
     {
-        private DataBaseDao databaseDao = new DataBaseDao();
+        private AlbumDao albumDao = new AlbumDao();
 
         public int Create(List<Album> album)
         {
             try
             {
-                return this.databaseDao.AddMore(album);
+                return this.albumDao.AddMore(album);
             }
             catch (Exception e)
             {
@@ -27,7 +27,7 @@ namespace TGS.Business.Logic
         {
             try
             {
-                return this.databaseDao.DeleteById(id);
+                return this.albumDao.DeleteById(id);
             }
             catch (Exception e)
             {
@@ -49,7 +49,7 @@ namespace TGS.Business.Logic
         {
             try
             {
-                return this.databaseDao.ReadAll();
+                return this.albumDao.ReadAll();
             }
             catch (Exception e)
             {
@@ -61,7 +61,7 @@ namespace TGS.Business.Logic
         {
             try
             {
-                return this.databaseDao.ReadById(id);
+                return this.albumDao.ReadById(id);
             }
             catch (Exception e)
             {
@@ -73,7 +73,7 @@ namespace TGS.Business.Logic
         {
             try
             {
-                return this.databaseDao.UpdateAlbum(album, id);
+                return this.albumDao.UpdateAlbum(album, id);
             }
             catch (Exception e)
             {

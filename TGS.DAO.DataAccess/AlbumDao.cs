@@ -8,11 +8,11 @@ using TGS.DAO.DataAccess.Interfaces2;
 
 namespace TGS.DAO.DataAccess
 {
-    public class DataBaseDao : IAlbumRead, IAlbumCreate, IAlbumDelete, IAlbumUpdate
+    public class AlbumDao : IAlbumRead, IAlbumCreate, IAlbumDelete, IAlbumUpdate
     {
         private string Conexion { get; set; }
 
-        public DataBaseDao()
+        public AlbumDao()
         {
             this.Conexion = Configurations.ReadDataBaseConnection();
         }
@@ -101,7 +101,6 @@ namespace TGS.DAO.DataAccess
 
         public int DeleteById(int id)
         {
-            Album albumInsertado = new Album();
             using (SqlConnection connection = new SqlConnection(this.Conexion))
             {
                 using (SqlCommand command = new SqlCommand())
