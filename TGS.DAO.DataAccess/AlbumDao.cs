@@ -24,6 +24,7 @@ namespace TGS.DAO.DataAccess
                 SqlConnection connection = new SqlConnection(this.Conexion))
             {
                 connection.Open();
+                //select * from dbo.AlbumList order by Id desc
                 using (SqlCommand myCommand = new SqlCommand("select * from dbo.AlbumList", connection))
                 {
                     SqlDataReader myReader = myCommand.ExecuteReader();
