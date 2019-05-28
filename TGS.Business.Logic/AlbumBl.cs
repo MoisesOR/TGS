@@ -80,5 +80,21 @@ namespace TGS.Business.Logic
                 throw;
             }
         }
+
+        public bool CheckAlbumName(string album)
+        {
+            bool exist = false;
+            Console.WriteLine("Album Name: {0}, en la base de datos: {1}", album, albumDao.ReadAlbumByName(album));
+            if (albumDao.ReadAlbumByName(album).Name == album)
+            {
+                exist = true;
+            }
+            return exist;
+        }
+
+        public int GetAlbumId(string album)
+        {
+            return albumDao.ReadAlbumByName(album).Id;
+        }
     }
 }

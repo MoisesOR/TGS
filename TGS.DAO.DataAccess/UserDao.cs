@@ -81,5 +81,47 @@ namespace TGS.DAO.DataAccess
             }
             return users;
         }
+
+        public string ReadByName(string userName)
+        {
+            string user = "";
+            using (SqlConnection connection = new SqlConnection(Conexion))
+            {
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = "select * from dbo.UserList a where a.[User]=@userName";
+                    command.Parameters.AddWithValue("@userName", userName);
+
+                    connection.Open();
+                    SqlDataReader myReader = command.ExecuteReader();
+                    while (myReader.Read())
+                    {
+                        user = myReader["User"].ToString();
+                    }
+                }
+            }
+            return user;
+        }
+
+        public int DeleteByName(string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(Conexion))
+            {
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = @"DELETE from dbo.UserList 
+                                            WHERE [User] = @UserName";
+                    command.Parameters.AddWithValue("@UserName", userName);
+
+                    connection.Open();
+                    int recordsAffected = command.ExecuteNonQuery();
+                    return recordsAffected;
+                }
+            }
+        }
     }
 }

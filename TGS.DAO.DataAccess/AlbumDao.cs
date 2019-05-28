@@ -148,6 +148,33 @@ namespace TGS.DAO.DataAccess
                 }
             }
         }
-        
+
+        public Album ReadAlbumByName(string albumName)
+        {
+            Album album = new Album();
+            using (SqlConnection connection = new SqlConnection(Conexion))
+            {
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = "select * from dbo.AlbumList a where a.Album=@AlbumName";
+                    command.Parameters.AddWithValue("@AlbumName", albumName);
+
+                    connection.Open();
+                    SqlDataReader myReader = command.ExecuteReader();
+                    while (myReader.Read())
+                    {
+                        album.Id = Convert.ToInt32(myReader["Id"]);
+                        album.Name = myReader["Album"].ToString();
+                        album.Year = Convert.ToInt32(myReader["Year"]);
+                        album.Artist = myReader["Artist"].ToString();
+                        album.Genre = myReader["Genre"].ToString();
+                        album.Subgenre = myReader["Subgenre"].ToString();
+                    }
+                }
+            }
+            return album;
+        }
     }
 }

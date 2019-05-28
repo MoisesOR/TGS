@@ -41,5 +41,21 @@ namespace TGS.Business.Facade.Controllers
             }
             return "No object created";
         }
+
+        // GET: api/user/Antonio
+        [Route("angular/{userName}")]
+        [HttpGet]
+        public bool CheckUser(string userName)
+        {
+            return userBl.CheckUser(userName);
+        }
+
+        // GET: api/user/Antonio
+        [Route("angular/check/{userName}")]
+        [HttpGet]
+        public bool CheckIfUserDeleted(string userName)
+        {
+            return userBl.CheckIfUserDeleted(userName);
+        }
     }
 }
