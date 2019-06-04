@@ -92,5 +92,21 @@ namespace TGS.Business.Logic
                 throw;
             }
         }
+
+        public bool CheckGroupName(string groupName)
+        {
+            bool exist = false;
+            Console.WriteLine("Group Name: {0}, en la base de datos: {1}", groupName, groupDao.ReadGroupByName(groupName));
+            if (groupDao.ReadGroupByName(groupName).GroupName == groupName)
+            {
+                exist = true;
+            }
+            return exist;
+        }
+
+        public int GetGroupId(string groupName)
+        {
+            return groupDao.ReadGroupByName(groupName).Id;
+        }
     }
 }

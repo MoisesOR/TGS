@@ -168,5 +168,35 @@ namespace TGS.DAO.DataAccess
             }
         }
 
+        public Group ReadGroupByName(string groupName)
+        {
+            Group group = new Group();
+            using (SqlConnection connection = new SqlConnection(this.Conexion))
+            {
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = "select * from dbo.GroupList a where a.[Group]=@GroupName";
+                    command.Parameters.AddWithValue("@GroupName", groupName);
+
+                    connection.Open();
+                    SqlDataReader myReader = command.ExecuteReader();
+                    while (myReader.Read())
+                    {
+                        group.Id = Convert.ToInt32(myReader["Id"]);
+                        group.GroupName = myReader["Group"].ToString();
+                        group.StartYear = Convert.ToInt32(myReader["StartYear"]);
+                        group.EndYear = Convert.ToInt32(myReader["EndYear"]);
+                        group.Country = myReader["Country"].ToString();
+                        group.City = myReader["City"].ToString();
+                        group.UrlWiki = myReader["UrlWiki"].ToString();
+                        group.Description = myReader["Description"].ToString();
+                    }
+                }
+            }
+            return group;
+        }
+
     }
 }

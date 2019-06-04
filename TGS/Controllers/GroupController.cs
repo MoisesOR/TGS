@@ -73,5 +73,21 @@ namespace TGS.Business.Facade.Controllers
             }
             return "Object not found.";
         }
+
+        // GET: angular/1
+        [Route("angular/{grupName}")]
+        [HttpGet]
+        public bool CheckGroupName(string grupName)
+        {
+            return groupBl.CheckGroupName(grupName);
+        }
+
+        // GET: api/album/5
+        [Route("angular/id/{grupName}")]
+        [HttpGet]
+        public int GetAlbumId(string grupName)
+        {
+            return groupBl.GetGroupId(grupName);
+        }
     }
 }
